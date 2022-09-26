@@ -13,7 +13,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 import environ
+import mimetypes
 
+mimetypes.add_type("text/css", ".css", True)
 env = environ.Env()
 environ.Env.read_env()
 
@@ -81,12 +83,30 @@ WSGI_APPLICATION = 'kkmnow.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if os.getenv("DATABASE_URL", "") != "" :
+    r = urlparse(os.environ.get("DATABASE_URL"))
+    DATABASES = {
+        "default" : {
+            "ENGINE" : "django.db.backends.postgresql_psycopg2",
+            "NAME" : os.path.relpath(r.path, "/"),
+            "USER" : r.username,
+            "PASSWORD" : r.password,
+            "HOST" : r.hostname,
+            "PORT" : r.port,
+            "OPTIONS" : {"sslmode" : "require"}
+        }
     }
-}
+else :
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv("POSTGRES_DB"),
+            'USER': os.getenv("POSTGRES_USER"),
+            'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
+            'HOST': os.getenv("POSTGRES_HOST"),
+            'PORT': os.getenv("POSTGRES_PORT")
+        }
+    }
 
 
 # Password validation
