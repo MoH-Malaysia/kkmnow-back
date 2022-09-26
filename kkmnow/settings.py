@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 import environ
+from urllib.parse import urlparse
 import mimetypes
 
 mimetypes.add_type("text/css", ".css", True)
