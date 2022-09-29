@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from kkmnow import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('kkmnow/', views.KKMNOW.as_view(), name="KKMNOW"),
 ]
