@@ -40,7 +40,8 @@ ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOST").split(",")
 
 INSTALLED_APPS = [
     'rest_framework',
-    'kkmnow',    
+    'kkmnow',
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
