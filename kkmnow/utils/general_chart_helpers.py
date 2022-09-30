@@ -4,6 +4,7 @@ import numpy as np
 import copy
 import ast
 from mergedeep import merge
+import re
 
 # Gets all nested keys in dictionary
 def get_nested_keys(d, keys, search):
@@ -51,7 +52,8 @@ def rename_labels(label, rname_dict) :
     txt = label
 
     for k, v in rname_dict.items() :
-        txt = txt.replace(k, v)
+        txt = re.sub(k, v, txt)
+        # txt = txt.replace(k, v)
 
     return txt.replace("_", " ").title()
 
