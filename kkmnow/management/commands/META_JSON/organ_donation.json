@@ -92,11 +92,10 @@
           "null_values": null,
           "replace_vals": {},
           "dict_rename": {
-            "female_": "",
-            "male_": ""
+            "[a-zA-Z]+_" : ""
           },
           "operation": "SET",
-          "row_format" : "upper"
+          "row_format" : "title"
         }
       },
       "timeseries": {
