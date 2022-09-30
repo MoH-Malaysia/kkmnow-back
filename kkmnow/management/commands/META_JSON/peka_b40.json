@@ -57,7 +57,7 @@
             "[a-zA-Z]+_" : ""
           },
           "operation": "SET",
-          "row_format" : "upper"
+          "row_format" : "title"
         }
       },
       "timeseries": {
