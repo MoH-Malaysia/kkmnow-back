@@ -191,10 +191,8 @@
       "name": "map_facility",
       "chart_type": "custom_chart",
       "chart_source": "./KKMNOW_DATA/PARQUET/blood_donation/blood_05_map_facility.parquet",
-      "api_type": "dynamic",
-      "api_params": [
-        "state"
-      ],
+      "api_type": "static",
+      "api_params": [],
       "variables": {
         "keys": [
           "state",
