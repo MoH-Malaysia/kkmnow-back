@@ -8,7 +8,7 @@
       "bar_chart": {
         "name": "bar_chart",
         "chart_type": "bar_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/covid_epid/covidepid_05_bar.parquet",
+        "chart_source": "covidepid_05_bar.parquet",
         "api_type": "static",
         "api_params": [],
         "variables": {
@@ -28,7 +28,7 @@
       "snapshot_bar": {
         "name": "snapshot_bar",
         "chart_type": "bar_meter",
-        "chart_source": "./KKMNOW_DATA/PARQUET/covid_epid/covidepid_02_snapshot_bar.parquet",
+        "chart_source": "covidepid_02_snapshot_bar.parquet",
         "api_type": "static",
         "api_params": [],
         "variables": {
@@ -61,7 +61,7 @@
       "snapshot_graphic": {
         "name": "snapshot_graphic",
         "chart_type": "custom_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/covid_epid/covidepid_02_snapshot_graphic.parquet",
+        "chart_source": "covidepid_02_snapshot_graphic.parquet",
         "api_type": "dynamic",
         "api_params": ["state"],
         "variables": {
@@ -98,7 +98,7 @@
       "snapshot_table": {
         "name": "snapshot_table",
         "chart_type": "snapshot_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/covid_epid/covidepid_04_snapshot_table.parquet",
+        "chart_source": "covidepid_04_snapshot_table.parquet",
         "api_type": "static",
         "api_params": [],
         "variables": {
@@ -128,7 +128,7 @@
       "timeseries_admitted": {
         "name": "timeseries_admitted",
         "chart_type": "timeseries_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/covid_epid/covidepid_03_timeseries.parquet",
+        "chart_source": "covidepid_03_timeseries.parquet",
         "api_type": "dynamic",
         "api_params": [
           "state"
@@ -144,7 +144,7 @@
       "timeseries_cases": {
         "name": "timeseries_cases",
         "chart_type": "timeseries_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/covid_epid/covidepid_03_timeseries.parquet",
+        "chart_source": "covidepid_03_timeseries.parquet",
         "api_type": "dynamic",
         "api_params": [
           "state"
@@ -160,7 +160,7 @@
       "timeseries_deaths": {
         "name": "timeseries_deaths",
         "chart_type": "timeseries_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/covid_epid/covidepid_03_timeseries.parquet",
+        "chart_source": "covidepid_03_timeseries.parquet",
         "api_type": "dynamic",
         "api_params": [
           "state"
@@ -178,7 +178,7 @@
       "timeseries_icu": {
         "name": "timeseries_icu",
         "chart_type": "timeseries_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/covid_epid/covidepid_03_timeseries.parquet",
+        "chart_source": "covidepid_03_timeseries.parquet",
         "api_type": "dynamic",
         "api_params": [
           "state"
@@ -194,7 +194,7 @@
       "timeseries_tests": {
         "name": "timeseries_tests",
         "chart_type": "timeseries_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/covid_epid/covidepid_03_timeseries.parquet",
+        "chart_source": "covidepid_03_timeseries.parquet",
         "api_type": "dynamic",
         "api_params": [
           "state"
@@ -211,7 +211,7 @@
       "timeseries_vents": {
         "name": "timeseries_vents",
         "chart_type": "timeseries_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/covid_epid/covidepid_03_timeseries.parquet",
+        "chart_source": "covidepid_03_timeseries.parquet",
         "api_type": "dynamic",
         "api_params": [
           "state"
@@ -224,10 +224,30 @@
           }
         }
       },
+      "statistics": {
+        "name": "statistics",
+        "chart_type": "custom_chart",
+        "chart_source": "covidepid_03_timeseries_keystats.parquet",
+        "api_type": "dynamic",
+        "api_params": [
+          "state"
+        ],
+        "variables": {
+          "keys": [
+            "state",
+            "chart_type"
+          ],
+          "columns": [
+            "annot1",
+            "annot2"
+          ],
+          "null_vals": null
+        }
+      },      
       "util_chart": {
         "name": "util_chart",
         "chart_type": "custom_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/covid_epid/covidepid_01_util.parquet",
+        "chart_source": "covidepid_01_util.parquet",
         "api_type": "dynamic",
         "api_params": [
           "state"

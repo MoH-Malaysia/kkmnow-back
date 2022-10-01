@@ -11,12 +11,11 @@
     "distances_between": {
       "name": "distances_between",
       "chart_type": "bar_chart",
-      "chart_source": "./KKMNOW_DATA/PARQUET/facilities/fac_formatted.parquet",
+      "chart_source": "facilities_02_distances_between.parquet",
       "api_type": "dynamic",
       "api_params": [
-        "state",
-        "district",
-        "fac_type"
+        "fac_type",
+        "__FIXED__district"
       ],
       "variables": {
         "keys": [
@@ -32,12 +31,12 @@
     "distances_within": {
       "name": "distances_within",
       "chart_type": "bar_chart",
-      "chart_source": "./KKMNOW_DATA/PARQUET/facilities/facilities_02_distances_within.parquet",
+      "chart_source": "facilities_02_distances_within.parquet",
       "api_type": "dynamic",
       "api_params": [
+        "fac_type",
         "state",
-        "district",
-        "fac_type"
+        "district"
       ],
       "variables": {
         "keys": [
@@ -62,58 +61,26 @@
         }
       }
     },
-    "facilities_table": {
-      "name": "facilities_table",
-      "chart_type": "snapshot_chart",
-      "chart_source": "./KKMNOW_DATA/PARQUET/facilities/facilities_01_table.parquet",
-      "api_type": "static",
-      "api_params": [
-        "table"
-      ],
-      "variables": {
-        "main_key": "state",
-        "replace_word": "",
-        "null_vals": null,
-        "data": {
-          "data": [
-            "district",
-            "sector",
-            "type",
-            "name",
-            "address",
-            "phone"
-          ]
-        }
-      }
-    },
     "locations": {
       "name": "locations",
-      "chart_type": "custom_chart",
-      "chart_source": "./KKMNOW_DATA/PARQUET/facilities/facilities_01_table.parquet",
+      "chart_type": "map_lat_lon",
+      "chart_source": "facilities_01_table.parquet",
       "api_type": "dynamic",
       "api_params": [
+        "fac_type",
         "state",
-        "district",
-        "fac_type"
+        "district"
       ],
       "variables": {
-        "keys": [
-          "state",
-          "district",
-          "type"
-        ],
-        "columns": [
-          "name",
-          "lat",
-          "lon"
-        ],
-        "null_vals": null
+        "keys" : ["type", "state", "district"],
+        "values" : ["name", "lat", "lon"],
+        "null_vals" : null
       }
     },
     "helpers": {
       "name": "helpers",
       "chart_type": "helpers_custom",
-      "chart_source": "./KKMNOW_DATA/PARQUET/facilities/facilities_01_table.parquet",
+      "chart_source": "facilities_01_table.parquet",
       "api_type": "static",
       "api_params": [],
       "variables": {}

@@ -6,7 +6,7 @@
       "bar_chart": {
       "name": "bar_chart",
       "chart_type": "bar_meter",
-      "chart_source": "./KKMNOW_DATA/PARQUET/covid_now/covidnow_05_barcharts.parquet",
+      "chart_source": "covidnow_05_barcharts.parquet",
       "api_type": "static",
       "api_params": [],
       "variables": {
@@ -31,7 +31,7 @@
       "choropleth_malaysia": {
         "name": "choropleth_malaysia",
         "chart_type": "snapshot_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/covid_now/covidnow_03_choropleth_msia.parquet",
+        "chart_source": "covidnow_03_choropleth_msia.parquet",
         "api_type": "static",
         "api_params": [],
         "variables": {
@@ -52,7 +52,7 @@
       "choropleth_world": {
         "name": "choropleth_world",
         "chart_type": "snapshot_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/covid_now/covidnow_02_choropleth_world.parquet",
+        "chart_source": "covidnow_02_choropleth_world.parquet",
         "api_type": "static",
         "api_params": [],
         "variables": {
@@ -73,7 +73,7 @@
       "heatmap": {
         "name": "heatmap",
         "chart_type": "heatmap_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/covid_now/covidnow_04_heattable.parquet",
+        "chart_source": "covidnow_04_heattable.parquet",
         "api_type": "static",
         "api_params": [],
         "variables": {
@@ -117,7 +117,7 @@
       "timeseries": {
         "name": "timeseries",
         "chart_type": "timeseries_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/covid_now/covidnow_01_timeseries.parquet",
+        "chart_source": "covidnow_01_timeseries.parquet",
         "api_type": "static",
         "api_params": [],
         "variables": {

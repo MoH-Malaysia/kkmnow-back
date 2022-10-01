@@ -8,7 +8,7 @@
     "bar_chart_age": {
       "name": "bar_chart_age",
       "chart_type": "bar_chart",
-      "chart_source": "./KKMNOW_DATA/PARQUET/blood_donation/blood_03_barchart_age.parquet",
+      "chart_source": "blood_03_barchart_age.parquet",
       "api_type": "dynamic",
       "api_params": [
         "state"
@@ -27,7 +27,7 @@
     "bar_chart_time": {
       "name": "bar_chart_time",
       "chart_type": "bar_chart",
-      "chart_source": "./KKMNOW_DATA/PARQUET/blood_donation/blood_03_barchart_time.parquet",
+      "chart_source": "blood_03_barchart_time.parquet",
       "api_type": "dynamic",
       "api_params": [
         "state"
@@ -46,7 +46,7 @@
     "heatmap_bloodstock": {
       "name": "heatmap_bloodstock",
       "chart_type": "heatmap_chart",
-      "chart_source": "./KKMNOW_DATA/PARQUET/blood_donation/blood_01_stock_snapshot.parquet",
+      "chart_source": "blood_01_stock_snapshot.parquet",
       "api_type": "static",
       "api_params": [],
       "variables": {
@@ -78,7 +78,7 @@
     "heatmap_donorrate": {
       "name": "heatmap_donorrate",
       "chart_type": "heatmap_chart",
-      "chart_source": "./KKMNOW_DATA/PARQUET/blood_donation/blood_04_heatmap_donorrate.parquet",
+      "chart_source": "blood_04_heatmap_donorrate.parquet",
       "api_type": "dynamic",
       "api_params": [
         "state"
@@ -114,7 +114,7 @@
     "heatmap_retention": {
       "name": "heatmap_retention",
       "chart_type": "heatmap_chart",
-      "chart_source": "./KKMNOW_DATA/PARQUET/blood_donation/blood_04_heatmap_retention.parquet",
+      "chart_source": "blood_04_heatmap_retention.parquet",
       "api_type": "dynamic",
       "api_params": [
         "state"
@@ -139,7 +139,7 @@
     "timeseries_all": {
       "name": "timeseries_all",
       "chart_type": "timeseries_chart",
-      "chart_source": "./KKMNOW_DATA/PARQUET/blood_donation/blood_02_timeseries.parquet",
+      "chart_source": "blood_02_timeseries.parquet",
       "api_type": "dynamic",
       "api_params": [
         "state"
@@ -156,7 +156,7 @@
     "timeseries_bloodstock": {
       "name": "timeseries_bloodstock",
       "chart_type": "timeseries_chart",
-      "chart_source": "./KKMNOW_DATA/PARQUET/blood_donation/blood_01_stock_timeseries.parquet",
+      "chart_source": "blood_01_stock_timeseries.parquet",
       "api_type": "dynamic",
       "api_params": [
         "state"
@@ -174,7 +174,7 @@
     "timeseries_facility": {
       "name": "timeseries_facility",
       "chart_type": "timeseries_chart",
-      "chart_source": "./KKMNOW_DATA/PARQUET/blood_donation/blood_05_timeseries_facility.parquet",
+      "chart_source": "blood_05_timeseries_facility.parquet",
       "api_type": "static",
       "api_params": [],
       "variables": {
@@ -190,7 +190,7 @@
     "map_facility": {
       "name": "map_facility",
       "chart_type": "custom_chart",
-      "chart_source": "./KKMNOW_DATA/PARQUET/blood_donation/blood_05_map_facility.parquet",
+      "chart_source": "blood_05_map_facility.parquet",
       "api_type": "static",
       "api_params": [],
       "variables": {
@@ -208,7 +208,7 @@
     "barchart_key_variables" : {
       "name": "barchart_key_variables",
       "chart_type": "bar_meter",
-      "chart_source": "./KKMNOW_DATA/PARQUET/blood_donation/blood_02_barcharts.parquet",
+      "chart_source": "blood_02_barcharts.parquet",
       "api_type": "dynamic",
       "api_params": [
         "state"

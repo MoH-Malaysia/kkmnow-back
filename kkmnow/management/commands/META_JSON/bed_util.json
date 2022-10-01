@@ -8,7 +8,7 @@
       "table_facility": {
         "name": "table_facility",
         "chart_type": "snapshot_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/bed_util/bedutil_01_table_facility.parquet",
+        "chart_source": "bedutil_01_table_facility.parquet",
         "api_type": "static",
         "api_params": [],
         "variables": {
@@ -29,7 +29,7 @@
       "table_state": {
         "name": "table_state",
         "chart_type": "snapshot_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/bed_util/bedutil_01_table_state.parquet",
+        "chart_source": "bedutil_01_table_state.parquet",
         "api_type": "static",
         "api_params": [],
         "variables": {
@@ -46,24 +46,10 @@
           }
         }
       },
-      "timeseries_state": {
-        "name": "timeseries_state",
-        "chart_type": "timeseries_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/bed_util/bedutil_02_timeseries_state.parquet",
-        "api_type": "static",
-        "api_params": [],
-        "variables": {
-          "state" : {
-              "x" : "date",
-              "line_util_non_icu" : "util_nonicu",
-              "line_util_icu" : "util_icu"
-          }          
-        }
-      },
       "timeseries_facility": {
         "name": "timeseries_facility",
         "chart_type": "timeseries_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/bed_util/bedutil_02_timeseries_facility.parquet",
+        "chart_source": "bedutil_02_timeseries_facility.parquet",
         "api_type": "static",
         "api_params": [],
         "variables": {

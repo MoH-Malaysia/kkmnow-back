@@ -17,6 +17,14 @@ def bar_chart(file_name, variables) :
 
     if 'state' in df.columns : 
         df['state'].replace(STATE_ABBR, inplace=True)
+
+    if 'district' in df.columns : # District usually uses has spaces and Uppercase 
+        df['district'] = df['district'].apply(lambda x : x.lower().replace(' ', '-'))
+    
+    # Remove later on!!
+    if 'type' in df.columns :  
+        df['type'] = df['type'].apply(lambda x : x.lower())
+
     df = df.replace({np.nan: None})
 
     keys = variables['keys']
@@ -135,6 +143,9 @@ def custom_chart(file_name, variables) :
     if 'state' in df.columns : 
         df['state'].replace(STATE_ABBR, inplace=True)
 
+    if 'district' in df.columns : # District usually uses has spaces and Uppercase 
+        df['district'] = df['district'].apply(lambda x : x.lower().replace(' ', '-'))
+
     keys = variables['keys']
 
     df['data'] = df[ variables['columns'] ].to_dict(orient="records")
@@ -212,6 +223,9 @@ def snapshot_chart(file_name, variables) :
     if 'state' in df.columns : 
         df['state'].replace(STATE_ABBR, inplace=True)
     df = df.replace({np.nan: variables['null_vals']})
+
+    if 'district' in df.columns : # District usually uses has spaces and Uppercase 
+        df['district'] = df['district'].apply(lambda x : x.lower().replace(' ', '-'))
 
     main_key = variables['main_key']
     replace_word = variables['replace_word']
@@ -366,3 +380,38 @@ def helpers_custom(file_name) :
         state_mapping['state_district_mapping'][state] = df.groupby('state').get_group(state)['district'].unique().tolist()
 
     return state_mapping
+
+'''
+Maps Latitude and Longitudes
+'''
+def map_lat_lon(file_name, variables) :
+    keys = variables['keys']
+    values = variables['values'] 
+
+    df = pd.read_parquet(file_name)
+    df = df.replace({np.nan: variables['null_vals']})
+
+    if 'state' in df.columns : 
+        df['state'].replace(STATE_ABBR, inplace=True)
+
+    if 'district' in df.columns : 
+        df['district'] = df['district'].apply(lambda x : x.lower().replace(' ', '-'))
+    
+    # Remove in the future
+    if 'type' in df.columns : 
+        df['type'] = df['type'].apply(lambda x:x.lower())
+    
+    df['u_groups'] = list(df[keys].itertuples(index=False, name=None))
+    u_groups_list = df['u_groups'].unique().tolist()
+
+    res = {}
+
+    for group in u_groups_list : 
+        result = {}
+        for b in group[::-1]:
+            result = {b: result}
+        d_values = df.groupby(keys).get_group(group)[values].to_dict(orient='records')
+        set_dict(result, list(group), d_values, 'SET')
+        merge(res, result)
+
+    return res

@@ -8,7 +8,7 @@
       "barchart_age": {
         "name": "barchart_age",
         "chart_type": "bar_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/organ_donation/organ_02_barchart_age.parquet",
+        "chart_source": "organ_02_barchart_age.parquet",
         "api_type": "dynamic",
         "api_params": [
           "state"
@@ -27,7 +27,7 @@
       "barchart_reasons": {
         "name": "barchart_reasons",
         "chart_type": "bar_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/organ_donation/organ_03_barchart_reasons.parquet",
+        "chart_source": "organ_03_barchart_reasons.parquet",
         "api_type": "dynamic",
         "api_params": [
           "state"
@@ -46,7 +46,7 @@
       "barchart_time": {
         "name": "barchart_time",
         "chart_type": "bar_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/organ_donation/organ_02_barchart_time.parquet",
+        "chart_source": "organ_02_barchart_time.parquet",
         "api_type": "dynamic",
         "api_params": [
           "state"
@@ -65,7 +65,7 @@
       "heatmap_pledgerrate": {
         "name": "heatmap_pledgerrate",
         "chart_type": "heatmap_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/organ_donation/organ_03_heatmap_pledgerrate.parquet",
+        "chart_source": "organ_03_heatmap_pledgerrate.parquet",
         "api_type": "dynamic",
         "api_params": [
           "state"
@@ -101,7 +101,7 @@
       "timeseries": {
         "name": "timeseries",
         "chart_type": "timeseries_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/organ_donation/organ_01_timeseries.parquet",
+        "chart_source": "organ_01_timeseries.parquet",
         "api_type": "dynamic",
         "api_params": [
           "state"
