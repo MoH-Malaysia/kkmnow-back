@@ -6,6 +6,7 @@ import zipfile
 
 def create_directory(dir_name) :
     try: 
+        print("dir_name" + dir_name)
         os.mkdir(os.path.join(os.getcwd(), dir_name)) # KKMNOW_SRC
     except OSError as error: 
         print("Directory already exists, no need to create")
@@ -25,9 +26,18 @@ def fetch_from_git(zip_name, git_directory, git_token) :
     return res
 
 def write_as_binary(file_name, data) :
-    with open(file_name, 'wb') as f:
-        f.write(data.content)
+    try : 
+        print("Binary file name : " + file_name)
+        with open(file_name, 'wb') as f:
+            f.write(data.content)
+    except : 
+        print("Issue writing file as binary")
 
 def extract_zip(file_name, dir_name) :
-    with zipfile.ZipFile(file_name, 'r') as zip_ref:
-        zip_ref.extractall(os.path.join(os.getcwd(), dir_name))
+    try : 
+        print("zip file name : " + file_name)
+        print("zip dir : " + dir_name)
+        with zipfile.ZipFile(file_name, 'r') as zip_ref:
+            zip_ref.extractall(os.path.join(os.getcwd(), dir_name))
+    except : 
+        print("Issue extracting zip file")
