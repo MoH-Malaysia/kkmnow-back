@@ -75,6 +75,21 @@
             "line": "daily_7dma"
           }
         }
-      }
+      },
+      "choropleth_malaysia": {
+        "name": "choropleth_malaysia",
+        "chart_type": "snapshot_chart",
+        "chart_source": "pekab40_03_choropleth_msia.parquet",
+        "api_type": "static",
+        "api_params": [],
+        "variables": {
+          "main_key": "state",
+          "replace_word": "",
+          "null_vals": null,
+          "data": {
+            "data": ["perc"]
+          }
+        }
+      }       
     }
   }

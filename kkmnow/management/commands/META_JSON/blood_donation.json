@@ -223,6 +223,21 @@
         "condition" : {},
         "post_operation" : ""  
       }        
-    }
+    },
+    "choropleth_malaysia": {
+      "name": "choropleth_malaysia",
+      "chart_type": "snapshot_chart",
+      "chart_source": "blood_06_choropleth_msia.parquet",
+      "api_type": "static",
+      "api_params": [],
+      "variables": {
+        "main_key": "state",
+        "replace_word": "",
+        "null_vals": null,
+        "data": {
+          "data": ["perc"]
+        }
+      }
+    }    
   }
 }
