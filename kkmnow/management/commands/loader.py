@@ -90,7 +90,8 @@ class Command(BaseCommand):
                                 p.save()
                             # cache.set(dbd_name + "_" + k, res)    
                             print("SUCCESS : " + chart_name + ", Dashboard : " + dbd_name)
-                    except:
+                    except Exception as ee:
                         print("FAILED : " + chart_name + ", Dashboard : " + dbd_name)
+                        print(ee)
         except Exception as e : 
             print(e)
