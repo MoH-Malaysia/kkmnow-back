@@ -25,7 +25,7 @@ class KKMNOW(APIView) :
 def handle_request(param_list) :
     dbd_name = param_list['dashboard'][0]
     dbd_info = MetaJson.objects.filter(dashboard_name=dbd_name).values()
-    
+
     params_req = []
 
     if len(dbd_info) > 0 :
@@ -38,6 +38,7 @@ def handle_request(param_list) :
     res = {}
     if all (p in param_list for p in params_req) :
         data = KKMNowJSON.objects.filter(dashboard_name=dbd_name).values()
+
         if len(data) > 0 : 
             for i in data :
                 api_type = i['api_type']

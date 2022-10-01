@@ -22,6 +22,7 @@ def fetch_from_git(zip_name, git_directory, git_token) :
     res = {}
     res['file_name'] = file_name
     res['data'] = requests.get(url, headers=headers)
+    res['resp_code'] = res['data'].status_code
     return res
 
 def write_as_binary(file_name, data) :
