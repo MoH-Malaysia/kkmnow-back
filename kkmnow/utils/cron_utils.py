@@ -6,7 +6,6 @@ import zipfile
 
 def create_directory(dir_name) :
     try: 
-        print("dir_name" + dir_name)
         os.mkdir(os.path.join(os.getcwd(), dir_name)) # KKMNOW_SRC
     except OSError as error: 
         print("Directory already exists, no need to create")
