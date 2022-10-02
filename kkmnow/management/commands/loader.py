@@ -65,17 +65,12 @@ class Command(BaseCommand):
                 else : 
                     print("Cant fetch data") # Trigger fail here
 
-        def cron_test(sc): 
-            triggers.send_telegram("Test executed...")
-            sc.enter(60, 1, cron_test, (sc,))
 
 
         if operation == 'cron_update' : 
             update()
         elif operation == 'test' : 
-            s = sched.scheduler(time.time, time.sleep)
-            s.enter(60, 1, cron_test, (s,))
-            s.run()            
+            triggers.send_telegram("Test executed...")
         elif operation == 'rebuild' : 
             dir_name = 'KKMNOW_SRC'
             zip_name = 'repo.zip'
