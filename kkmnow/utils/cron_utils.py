@@ -2,6 +2,7 @@ import os
 from os import listdir
 from os.path import isfile, join
 from kkmnow.models import MetaJson, KKMNowJSON, GitHashData
+from kkmnow.utils import triggers
 import requests
 import zipfile
 
@@ -29,14 +30,14 @@ def write_as_binary(file_name, data) :
         with open(file_name, 'wb') as f:
             f.write(data.content)
     except : 
-        print("Issue writing file as binary")
+        triggers.send_telegram("!! FILE ISSUES WRITING TO BINARY !!")
 
 def extract_zip(file_name, dir_name) :
     try : 
         with zipfile.ZipFile(file_name, 'r') as zip_ref:
             zip_ref.extractall(os.path.join(os.getcwd(), dir_name))
     except : 
-        print("Issue extracting zip file")
+        triggers.send_telegram("!! ZIP FILE EXTRACTION ISSUE !!")
 
 def get_latest_commit(git_token) : 
     url = "https://api.github.com/repos/MoH-Malaysia/kkmnow-data/commits/main"
@@ -50,7 +51,7 @@ def get_latest_commit(git_token) :
     if res.status_code == 200 : 
         return str(res.content, 'UTF-8')
     else :
-        print('trigger failed build')
+        triggers.send_telegram("!! GIT FAILED TO PULL !!")
 
 def get_latest_hash(latest_commit_hash) : 
     last_updated_hash = GitHashData.objects.last()

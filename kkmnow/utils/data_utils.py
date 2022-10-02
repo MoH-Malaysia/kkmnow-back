@@ -4,6 +4,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 
 from kkmnow.models import MetaJson, KKMNowJSON
 from kkmnow.utils import dashboard_builder
+from kkmnow.utils import triggers
 
 import os
 from os import listdir
@@ -11,6 +12,7 @@ from os.path import isfile, join
 import json
 
 def rebuild_dashboard_meta(operation) :
+    triggers.send_telegram("META JSON " + operation + " IS BEING PERFORMED")
     if operation == 'REBUILD' : 
         MetaJson.objects.all().delete()
 
@@ -37,7 +39,8 @@ def rebuild_dashboard_meta(operation) :
 
         # cache.set('META_' + dbd_name, data)
 
-def rebuild_dashboard_charts(operation) : 
+def rebuild_dashboard_charts(operation) :
+    triggers.send_telegram("CHART " + operation + " ARE BEING PERFORMED")
     if operation == 'REBUILD' : 
         KKMNowJSON.objects.all().delete()
     
@@ -67,7 +70,6 @@ def rebuild_dashboard_charts(operation) :
                         p = KKMNowJSON.objects.create(dashboard_name=dbd_name, chart_name=k, chart_type=chart_type,api_type=api_type, chart_data=res)
                         p.save()
                     # cache.set(dbd_name + "_" + k, res)    
-                    print("SUCCESS : " + chart_name + ", Dashboard : " + dbd_name)
+                    # print("SUCCESS : " + chart_name + ", Dashboard : " + dbd_name)
             except Exception as e:
-                print(e)
-                print("-- FAILED : " + chart_name + ", Dashboard : " + dbd_name)    
+                triggers.send_telegram("! FAILED : " + chart_name + ", Dashboard : " + dbd_name + ", Reason : " + e)

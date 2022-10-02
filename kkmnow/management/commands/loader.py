@@ -3,6 +3,8 @@ from django.core.cache import cache
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 
+import sched, time
+
 import numpy as np
 import pandas as pd
 from datetime import datetime
@@ -63,13 +65,17 @@ class Command(BaseCommand):
                 else : 
                     print("Cant fetch data") # Trigger fail here
 
+        def cron_test(sc): 
+            triggers.send_telegram("Test executed...")
+            sc.enter(60, 1, cron_test, (sc,))
+
+
         if operation == 'cron_update' : 
             update()
-            sched = BlockingScheduler()
-            sched.add_job(update,'interval', minutes=10)
-            sched.start()
-        elif operation == 'update' : 
-            triggers.send_telegram("Building...")
+        elif operation == 'test' : 
+            s = sched.scheduler(time.time, time.sleep)
+            s.enter(60, 1, cron_test, (s,))
+            s.run()            
         elif operation == 'rebuild' : 
             dir_name = 'KKMNOW_SRC'
             zip_name = 'repo.zip'
