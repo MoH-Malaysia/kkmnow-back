@@ -7,12 +7,18 @@ from kkmnow.utils import data_utils
 import requests
 import zipfile
 
+'''
+Creates a directory
+'''
 def create_directory(dir_name) :
     try: 
         os.mkdir(os.path.join(os.getcwd(), dir_name)) # KKMNOW_SRC
     except OSError as error: 
         print("Directory already exists, no need to create")
 
+'''
+Fetches entire content from a git repo
+'''
 def fetch_from_git(zip_name, git_url, git_token) :
     file_name = os.path.join(os.getcwd(), zip_name)
     headers = {
@@ -26,6 +32,9 @@ def fetch_from_git(zip_name, git_url, git_token) :
     res['resp_code'] = res['data'].status_code
     return res
 
+'''
+Writes content as binary
+'''
 def write_as_binary(file_name, data) :
     try : 
         with open(file_name, 'wb') as f:
@@ -33,6 +42,9 @@ def write_as_binary(file_name, data) :
     except : 
         triggers.send_telegram("!! FILE ISSUES WRITING TO BINARY !!")
 
+'''
+Extracts zip file into desired directory
+'''
 def extract_zip(file_name, dir_name) :
     try : 
         with zipfile.ZipFile(file_name, 'r') as zip_ref:
@@ -40,50 +52,24 @@ def extract_zip(file_name, dir_name) :
     except : 
         triggers.send_telegram("!! ZIP FILE EXTRACTION ISSUE !!")
 
-def get_latest_commit(git_token) : 
-    url = "https://api.github.com/repos/MoH-Malaysia/kkmnow-data/commits/main"
-    git_token = os.getenv('GITHUB_TOKEN', '-')
-    headers = {
-        'Authorization': f'token {git_token}',
-        'Accept': 'application/vnd.github.VERSION.sha'
-    }
-    res = requests.get(url, headers=headers)
-
-    if res.status_code == 200 : 
-        return str(res.content, 'UTF-8')
-    else :
-        triggers.send_telegram("!! GIT FAILED TO PULL !!")
-
-def get_latest_hash(latest_commit_hash) : 
-    last_updated_hash = GitHashData.objects.last()
-    if not last_updated_hash : 
-        GitHashData.objects.create(git_hash = latest_commit_hash)
-
-    return last_updated_hash if not last_updated_hash else last_updated_hash.git_hash
-
-
-def update() :
+'''
+Performs data operations,
+such as update or rebuild
+'''
+def data_operation(operation) :
     dir_name = 'KKMNOW_SRC'
     zip_name = 'repo.zip'
     git_url = 'https://github.com/MoH-Malaysia/kkmnow-data/archive/main.zip'
     git_token = os.getenv('GITHUB_TOKEN', '-')
-    triggers.send_telegram("Checking for any updates...")
 
-    last_commit_hash = get_latest_commit(git_token)
-    last_updated_hash = get_latest_hash(last_commit_hash)
+    triggers.send_telegram("--- PERFORMING " + operation + " ---")
 
-    if not last_updated_hash or (last_commit_hash != last_updated_hash) :
-        create_directory(dir_name)
-        res = fetch_from_git(zip_name, git_url, git_token)
-        if 'resp_code' in res and res['resp_code'] == 200 : 
-            write_as_binary(res['file_name'], res['data'])
-            extract_zip(res['file_name'], dir_name)
-            data_utils.rebuild_dashboard_meta('UPDATE')
-            data_utils.rebuild_dashboard_charts('UPDATE')
-            hash_data = GitHashData.objects.get(index='HASH_DATA')
-            hash_data.git_hash = last_commit_hash
-            hash_data.save()
-        else : 
-            print("Cant fetch data") # Trigger fail here
+    create_directory(dir_name)
+    res = fetch_from_git(zip_name, git_url, git_token)
+    if 'resp_code' in res and res['resp_code'] == 200 : 
+        write_as_binary(res['file_name'], res['data'])
+        extract_zip(res['file_name'], dir_name)
+        data_utils.rebuild_dashboard_meta(operation)
+        data_utils.rebuild_dashboard_charts(operation)
     else : 
-        print("Git Hash remains same")
+        triggers.send_telegram("FAILED TO GET DATA FROM")

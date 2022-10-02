@@ -12,8 +12,6 @@ from .models import KKMNowJSON, MetaJson
 env = environ.Env()
 environ.Env.read_env()
 
-# Extract all magic keys to constants (e.g. "dashboards")
-
 class KKMNOW(APIView):
     def post(self, request, format=None):
         if "Authorization" not in request.headers:
@@ -23,8 +21,7 @@ class KKMNOW(APIView):
         if secret != os.getenv("WORKFLOW_TOKEN"):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-        cron_utils.update()
-        triggers.send_telegram("Git Push Made")
+        cron_utils.data_operation('UPDATE')
         return Response(status=status.HTTP_200_OK)
 
     def get(self, request, format=None):
@@ -37,7 +34,6 @@ class KKMNOW(APIView):
         else:
             return JsonResponse({}, safe=False)
 
-
 def handle_request(param_list):
     dbd_name = param_list["dashboard"][0]
     dbd_info = MetaJson.objects.filter(dashboard_name=dbd_name).values()
@@ -47,9 +43,7 @@ def handle_request(param_list):
     if len(dbd_info) > 0:
         dbd_info = dbd_info[0]
         dbd_info = dbd_info["dashboard_meta"]
-
         params_req = dbd_info["required_params"]
-        params_opt = dbd_info["optional_params"]
 
     res = {}
     if all(p in param_list for p in params_req):
@@ -62,50 +56,22 @@ def handle_request(param_list):
                 if api_type == "static":
                     res[i["chart_name"]] = i["chart_data"]
                 else:
+                    cur_chart_data = i["chart_data"]
                     if len(api_params) > 0:
-                        temp = i["chart_data"]
-                        for a in api_params:
-                            if a in param_list:
-                                key = (
-                                    param_list[a][0]
-                                    if "__FIXED__" not in a
-                                    else a.replace("__FIXED__", "")
-                                )
-                                if key in temp:
-                                    temp = temp[key]
-                            else:
-                                temp = {}  # Return an error, err status_code 400
-                                break
-                        if len(temp) > 0:
-                            res[i["chart_name"]] = temp
-                    else:
-                        res[i["chart_name"]] = i["chart_data"]
+                        cur_chart_data = get_nested_data(api_params, param_list, cur_chart_data)
+
+                    if len(cur_chart_data) > 0:
+                        res[i["chart_name"]] = cur_chart_data
     return res
 
-
-def slice_json_by_params(chart_params, url_params, data):
-    r_data = data
-
-    for i in chart_params:
-        param_val = url_params[i][0]
-        if param_val in data:
-            r_data = data[param_val]
+def get_nested_data(api_params, param_list, data) :
+    for a in api_params:
+        if a in param_list:
+            key = param_list[a][0] if "__FIXED__" not in a else a.replace("__FIXED__", "")
+            if key in data:
+                data = data[key]
         else:
+            data = {}
             break
-
-    return r_data
-
-
-def required_params(param_list, dict):
-    for i in param_list:
-        if i not in dict:
-            return False
-
-    return True
-
-
-def default_params(param, dict, default):
-    if param not in dict:
-        return default
-    else:
-        return dict[param][0]
+    
+    return data

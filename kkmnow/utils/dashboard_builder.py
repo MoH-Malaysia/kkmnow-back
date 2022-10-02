@@ -2,6 +2,11 @@ from kkmnow.utils.general_chart_helpers import *
 from kkmnow.utils.chart_builder import *
 import os
 
+'''
+Segregates chart types,
+into respective chart builders
+'''
+
 def build_chart(chart_type, data) :
     variables = data['variables']
     input_file = os.path.join(os.getcwd(), 'KKMNOW_SRC/kkmnow-data-main') + '/' + data['input']

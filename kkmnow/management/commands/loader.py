@@ -41,53 +41,13 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         operation =  kwargs['operation'][0]
 
-        def update() :
-            dir_name = 'KKMNOW_SRC'
-            zip_name = 'repo.zip'
-            git_url = 'https://github.com/MoH-Malaysia/kkmnow-data/archive/main.zip'
-            git_token = os.getenv('GITHUB_TOKEN', '-')
-            triggers.send_telegram("Checking for any updates...")
+        '''
+        OPERATIONS : 
+        1. UPDATE
+            - Updates the db, by updating values of pre-existing records
+        
+        2. REBUILD
+            - Rebuilds the db, by clearing existing values, and inputting new ones
+        '''
 
-            last_commit_hash = cron_utils.get_latest_commit(git_token)
-            last_updated_hash = cron_utils.get_latest_hash(last_commit_hash)
-
-            if not last_updated_hash or (last_commit_hash != last_updated_hash) :
-                cron_utils.create_directory(dir_name)
-                res = cron_utils.fetch_from_git(zip_name, git_url, git_token)
-                if 'resp_code' in res and res['resp_code'] == 200 : 
-                    cron_utils.write_as_binary(res['file_name'], res['data'])
-                    cron_utils.extract_zip(res['file_name'], dir_name)
-                    data_utils.rebuild_dashboard_meta('UPDATE')
-                    data_utils.rebuild_dashboard_charts('UPDATE')
-                    hash_data = GitHashData.objects.get(index='HASH_DATA')
-                    hash_data.git_hash = last_commit_hash
-                    hash_data.save()
-                else : 
-                    print("Cant fetch data") # Trigger fail here
-
-
-
-        if operation == 'cron_update' : 
-            update()
-        elif operation == 'test' : 
-            triggers.send_telegram("Test executed...")
-        elif operation == 'rebuild' : 
-            dir_name = 'KKMNOW_SRC'
-            zip_name = 'repo.zip'
-            git_url = 'https://github.com/MoH-Malaysia/kkmnow-data/archive/main.zip'
-            git_token = os.getenv('GITHUB_TOKEN', '-')
-            triggers.send_telegram("Force Rebuild...")
-
-            last_commit_hash = cron_utils.get_latest_commit(git_token)
-            last_updated_hash = cron_utils.get_latest_hash(last_commit_hash)
-
-            cron_utils.create_directory(dir_name)
-            res = cron_utils.fetch_from_git(zip_name, git_url, git_token)
-            if 'resp_code' in res and res['resp_code'] == 200 : 
-                cron_utils.write_as_binary(res['file_name'], res['data'])
-                cron_utils.extract_zip(res['file_name'], dir_name)
-                data_utils.rebuild_dashboard_meta('REBUILD')
-                data_utils.rebuild_dashboard_charts('REBUILD')
-                hash_data = GitHashData.objects.get(index='HASH_DATA')
-                hash_data.git_hash = last_commit_hash
-                hash_data.save()
+        cron_utils.data_operation(operation)
