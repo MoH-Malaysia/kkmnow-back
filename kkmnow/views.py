@@ -8,10 +8,17 @@ from django.core.cache import cache
 
 from .serializers import MetaSerializer, KKMSerializer
 from .models import MetaJson, KKMNowJSON
+from kkmnow.utils import cron_utils
+from kkmnow.utils import triggers
 
 import json
 
 class KKMNOW(APIView) :
+    def post(self, request, format=None) :
+        cron_utils.update()
+        triggers.send_telegram("Git Push Made")
+        return JsonResponse({}, safe=False)
+
     def get(self, request, format=None):
         param_list = dict(request.GET)
         params_req = ['dashboard']

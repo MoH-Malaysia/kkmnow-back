@@ -70,6 +70,7 @@ def rebuild_dashboard_charts(operation) :
                         p = KKMNowJSON.objects.create(dashboard_name=dbd_name, chart_name=k, chart_type=chart_type,api_type=api_type, chart_data=res)
                         p.save()
                     # cache.set(dbd_name + "_" + k, res)    
-                    # print("SUCCESS : " + chart_name + ", Dashboard : " + dbd_name)
+                    print("SUCCESS : " + chart_name + ", Dashboard : " + dbd_name)
             except Exception as e:
-                triggers.send_telegram("! FAILED : " + chart_name + ", Dashboard : " + dbd_name + ", Reason : " + e)
+                print("FAILED : " + chart_name + ", Dashboard : " + dbd_name)
+                # triggers.send_telegram("! FAILED : " + chart_name + ", Dashboard : " + dbd_name + ", Reason : " + e)
