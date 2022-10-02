@@ -2,12 +2,14 @@ from kkmnow.utils.general_chart_helpers import *
 from kkmnow.utils.chart_builder import *
 import os
 
+'''
+Segregates chart types,
+into respective chart builders
+'''
+
 def build_chart(chart_type, data) :
-    cwd = os.getcwd()
     variables = data['variables']
-    input_file = data['input'].replace("./", '')
-    f_name = os.path.dirname(os.path.realpath(__file__)) + '/' + input_file
-    input_file = f_name
+    input_file = os.path.join(os.getcwd(), 'KKMNOW_SRC/kkmnow-data-main') + '/' + data['input']
 
     match chart_type : 
         case 'bar_chart' :
@@ -26,6 +28,8 @@ def build_chart(chart_type, data) :
             return waffle_chart(input_file, variables)
         case 'helpers_custom' :
             return helpers_custom(input_file)
+        case 'map_lat_lon' : 
+            return map_lat_lon(input_file, variables)
         case _:
             # If its not found
             return {}

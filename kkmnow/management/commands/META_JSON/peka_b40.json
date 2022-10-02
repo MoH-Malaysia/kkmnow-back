@@ -8,7 +8,7 @@
       "barchart_ages": {
         "name": "barchart_ages",
         "chart_type": "bar_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/peka_b40/pekab40_02_barchart_ages.parquet",
+        "chart_source": "pekab40_02_barchart_ages.parquet",
         "api_type": "dynamic",
         "api_params": [
           "state"
@@ -27,7 +27,7 @@
       "heatmap_screenrate": {
         "name": "heatmap_screenrate",
         "chart_type": "heatmap_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/peka_b40/pekab40_02_heatmap_screenrate.parquet",
+        "chart_source": "pekab40_02_heatmap_screenrate.parquet",
         "api_type": "dynamic",
         "api_params": [
           "state"
@@ -63,7 +63,7 @@
       "timeseries": {
         "name": "timeseries",
         "chart_type": "timeseries_chart",
-        "chart_source": "./KKMNOW_DATA/PARQUET/peka_b40/pekab40_01_timeseries.parquet",
+        "chart_source": "pekab40_01_timeseries.parquet",
         "api_type": "dynamic",
         "api_params": [
           "state"
@@ -75,6 +75,21 @@
             "line": "daily_7dma"
           }
         }
-      }
+      },
+      "choropleth_malaysia": {
+        "name": "choropleth_malaysia",
+        "chart_type": "snapshot_chart",
+        "chart_source": "pekab40_03_choropleth_msia.parquet",
+        "api_type": "static",
+        "api_params": [],
+        "variables": {
+          "main_key": "state",
+          "replace_word": "",
+          "null_vals": null,
+          "data": {
+            "data": ["perc"]
+          }
+        }
+      }       
     }
   }
