@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'kkmnow',
     'corsheaders',
+    'django_celery_beat',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
