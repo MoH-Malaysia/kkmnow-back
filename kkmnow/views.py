@@ -16,13 +16,15 @@ environ.Env.read_env()
 
 class KKMNOW(APIView):
     def post(self, request, format=None):
-        if "Authorization" in request.headers:
-            secret = request.headers.get("Authorization")
-            if secret != os.getenv("WORKFLOW_TOKEN"):
-                return Response(status=status.HTTP_401_UNAUTHORIZED)
+        if "Authorization" not in request.headers:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+            
+        secret = request.headers.get("Authorization")
+        if secret != os.getenv("WORKFLOW_TOKEN"):
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-            cron_utils.update()
-            triggers.send_telegram("Git Push Made")
+        cron_utils.update()
+        triggers.send_telegram("Git Push Made")
         return Response(status=status.HTTP_200_OK)
 
     def get(self, request, format=None):
