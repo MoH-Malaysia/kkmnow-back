@@ -10,6 +10,7 @@ from datetime import datetime
 from kkmnow.utils import dashboard_builder
 from kkmnow.utils import cron_utils
 from kkmnow.utils import data_utils
+from kkmnow.utils import triggers
 
 from django.core.cache import cache
 
@@ -36,13 +37,14 @@ class Command(BaseCommand):
         help='States what the operation should be') 
     
     def handle(self, *args, **kwargs):
-        event_ids =  kwargs['operation'][0]
+        operation =  kwargs['operation'][0]
 
         def update() :
             dir_name = 'KKMNOW_SRC'
             zip_name = 'repo.zip'
             git_url = 'https://github.com/MoH-Malaysia/kkmnow-data/archive/main.zip'
             git_token = os.getenv('GITHUB_TOKEN', '-')
+            triggers.send_telegram("Checking for any updates...")
 
             last_commit_hash = cron_utils.get_latest_commit(git_token)
             last_updated_hash = cron_utils.get_latest_hash(last_commit_hash)
@@ -61,10 +63,10 @@ class Command(BaseCommand):
                 else : 
                     print("Cant fetch data") # Trigger fail here
 
-        if event_ids == 'cron_update' : 
+        if operation == 'cron_update' : 
             update()
             sched = BlockingScheduler()
             sched.add_job(update,'interval', minutes=10)
             sched.start()
-        # elif event_ids == 'update' : 
-            # Manually update here
+        elif operation == 'update' : 
+            triggers.send_telegram("Building...")
