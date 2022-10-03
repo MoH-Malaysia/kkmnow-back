@@ -224,13 +224,13 @@ def snapshot_chart(file_name, variables) :
         df['state'].replace(STATE_ABBR, inplace=True)
     df = df.replace({np.nan: variables['null_vals']})
 
-    # District usually uses has spaces and Uppercase 
-    if 'district' in df.columns and 'district' not in data['data']:
-        df['district'] = df['district'].apply(lambda x : x.lower().replace(' ', '-'))
-
     main_key = variables['main_key']
     replace_word = variables['replace_word']
     data = variables['data']
+
+    # District usually uses has spaces and Uppercase 
+    if 'district' in df.columns and 'district' not in data['data']:
+        df['district'] = df['district'].apply(lambda x : x.lower().replace(' ', '-'))
 
     record_list = list(data.keys())
     record_list.append('index')
