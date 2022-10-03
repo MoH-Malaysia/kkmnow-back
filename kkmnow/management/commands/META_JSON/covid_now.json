@@ -18,7 +18,7 @@
         "keys": [
           "chart"
         ],
-        "null_vals": 0,
+        "null_vals": null,
         "add_key": {
           "value_tooltip": "tooltip"
         },

@@ -224,7 +224,8 @@ def snapshot_chart(file_name, variables) :
         df['state'].replace(STATE_ABBR, inplace=True)
     df = df.replace({np.nan: variables['null_vals']})
 
-    if 'district' in df.columns : # District usually uses has spaces and Uppercase 
+    # District usually uses has spaces and Uppercase 
+    if 'district' in df.columns and 'district' not in data['data']:
         df['district'] = df['district'].apply(lambda x : x.lower().replace(' ', '-'))
 
     main_key = variables['main_key']
@@ -235,7 +236,6 @@ def snapshot_chart(file_name, variables) :
     record_list.append('index')
     record_list.append(main_key)
 
-    # df['index'] = range(0, len(df[main_key].unique()))
     df['index'] = range(0, len(df[main_key]))
 
     changed_cols = {}
@@ -246,21 +246,10 @@ def snapshot_chart(file_name, variables) :
 
     res_dict = df[record_list].to_dict(orient="records")
     
-    res_json = {}
     v2_res = []
 
     for i in res_dict :
-        # v1 code
-        # res_json[ i[main_key] ] = i
-
-        # v2 Code
         v2_res.append(i)
-
-    # Pushes all the items into an array
-    # v1 Code
-    # res = []
-    # for k, v in res_json.items() :
-    #     res.append( res_json[k] )
 
     res = v2_res
 
@@ -271,7 +260,7 @@ Builds Timeseries Chart
 '''
 def timeseries_chart(file_name, variables) :
     df = pd.read_parquet(file_name)
-    df = df.replace({np.nan: 0})
+    df = df.replace({np.nan: None})
     
     DATE_RANGE = ''
     if 'DATE_RANGE' in variables : 

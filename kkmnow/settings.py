@@ -85,6 +85,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kkmnow.wsgi.application'
 
+# File based caching
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/var/tmp/django_cache',
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

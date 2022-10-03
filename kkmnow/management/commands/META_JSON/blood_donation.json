@@ -149,8 +149,7 @@
           "x": "date",
           "daily": "daily",
           "line_daily": "daily_7dma"
-        },
-        "DATE_RANGE": "2_YEARS"
+        }
       }
     },
     "timeseries_bloodstock": {
@@ -216,7 +215,7 @@
       "variables": {
         "axis_values" : [{"variable" : "value"}],
         "keys" : ["state", "period", "chart"],          
-        "null_vals" : 0,
+        "null_vals" : null,
         "add_key" : {},
         "wanted" : [],
         "id_needed" : false,

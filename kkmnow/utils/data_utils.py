@@ -46,7 +46,7 @@ def rebuild_dashboard_meta(operation) :
             else : 
                 new_record = MetaJson.objects.create(dashboard_name=dbd_name,dashboard_meta=data)
                 new_record.save()
-            # cache.set('META_' + dbd_name, data)
+            cache.set('META_' + dbd_name, data)
         except Exception as e :
             failed_obj = {}
             failed_obj['DASHBOARD_NAME'] = dbd_name
@@ -100,7 +100,7 @@ def rebuild_dashboard_charts(operation) :
                     else : # If the record does not exist, insert
                         p = KKMNowJSON.objects.create(dashboard_name=dbd_name, chart_name=k, chart_type=chart_type,api_type=api_type, chart_data=res)
                         p.save()
-                    # cache.set(dbd_name + "_" + k, res)    
+                    cache.set(dbd_name + "_" + k, res)    
             except Exception as e:
                 failed_obj = {}
                 failed_obj['CHART_NAME'] = chart_name

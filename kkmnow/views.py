@@ -5,6 +5,10 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from django.core.cache import cache
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+
 from kkmnow.utils import cron_utils, triggers
 
 from .models import KKMNowJSON, MetaJson
@@ -35,33 +39,42 @@ class KKMNOW(APIView):
             return JsonResponse({}, safe=False)
 
 def handle_request(param_list):
-    dbd_name = param_list["dashboard"][0]
-    dbd_info = MetaJson.objects.filter(dashboard_name=dbd_name).values()
+    dbd_name = str(param_list["dashboard"][0])
+    dbd_info = cache.get("META_" + dbd_name)
+
+    if not dbd_info :
+        dbd_info = MetaJson.objects.filter(dashboard_name=dbd_name).values('dashboard_meta')
 
     params_req = []
 
     if len(dbd_info) > 0:
-        dbd_info = dbd_info[0]
-        dbd_info = dbd_info["dashboard_meta"]
+        dbd_info = dbd_info if isinstance(dbd_info, dict) else dbd_info[0]["dashboard_meta"]
         params_req = dbd_info["required_params"]
 
     res = {}
     if all(p in param_list for p in params_req):
-        data = KKMNowJSON.objects.filter(dashboard_name=dbd_name).values()
+        # data = KKMNowJSON.objects.filter(dashboard_name=dbd_name).values()
 
-        if len(data) > 0:
-            for i in data:
-                api_type = i["api_type"]
-                api_params = dbd_info["charts"][i["chart_name"]]["api_params"]
-                if api_type == "static":
-                    res[i["chart_name"]] = i["chart_data"]
-                else:
-                    cur_chart_data = i["chart_data"]
+        data = dbd_info['charts']
+
+        if len(data) > 0 :
+            for k, v in data.items() :
+                api_type = v['api_type']
+                api_params = v['api_params']
+                cur_chart_data = cache.get(dbd_name + "_" + k)
+
+                if not cur_chart_data :
+                    cur_chart_data = KKMNowJSON.objects.filter(dashboard_name=dbd_name, chart_name=k).values('chart_data')[0]['chart_data']                    
+                    cache.set(dbd_name + "_" + k, cur_chart_data)
+
+                if api_type == 'static' : 
+                    res[k] = cur_chart_data
+                else : 
                     if len(api_params) > 0:
                         cur_chart_data = get_nested_data(api_params, param_list, cur_chart_data)
-
+                    
                     if len(cur_chart_data) > 0:
-                        res[i["chart_name"]] = cur_chart_data
+                        res[k] = cur_chart_data
     return res
 
 def get_nested_data(api_params, param_list, data) :
