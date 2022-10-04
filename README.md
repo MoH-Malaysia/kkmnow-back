@@ -7,7 +7,7 @@ The backend API for KKMNOW that serves data available on [`MoH-Malaysia/kkmnow-d
 
 ## Setup virtual environment
 
-```
+```python
 <your python exe> -m venv env
 
 # activate and install dependencies
