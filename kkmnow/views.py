@@ -18,17 +18,17 @@ environ.Env.read_env()
 
 class KKMNOW(APIView):
     def post(self, request, format=None):
-        if "Authorization" not in request.headers:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-            
-        secret = request.headers.get("Authorization")
-        if secret != os.getenv("WORKFLOW_TOKEN"):
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        if is_valid_request(request, os.getenv("WORKFLOW_TOKEN")) :
+            cron_utils.data_operation('UPDATE')
+            return Response(status=status.HTTP_200_OK)
+        
+        return JsonResponse({'status':401,'message':"unauthorized"}, status=401)
 
-        cron_utils.data_operation('UPDATE')
-        return Response(status=status.HTTP_200_OK)
 
     def get(self, request, format=None):
+        if not is_valid_request(request, os.getenv("WORKFLOW_TOKEN")) :
+            return JsonResponse({'status': 401,'message':"unauthorized"}, status=401)
+
         param_list = dict(request.GET)
         params_req = ["dashboard"]
 
@@ -53,8 +53,6 @@ def handle_request(param_list):
 
     res = {}
     if all(p in param_list for p in params_req):
-        # data = KKMNowJSON.objects.filter(dashboard_name=dbd_name).values()
-
         data = dbd_info['charts']
 
         if len(data) > 0 :
@@ -77,6 +75,11 @@ def handle_request(param_list):
                         res[k] = cur_chart_data
     return res
 
+'''
+Slices dictionary,
+based on keys within dictionary
+'''
+
 def get_nested_data(api_params, param_list, data) :
     for a in api_params:
         if a in param_list:
@@ -88,3 +91,18 @@ def get_nested_data(api_params, param_list, data) :
             break
     
     return data
+
+'''
+Checks whether or not,
+a request made is valid
+'''
+
+def is_valid_request(request, workflow_token) : 
+    if "Authorization" not in request.headers:
+        return False
+        
+    secret = request.headers.get("Authorization")
+    if secret != workflow_token:
+        return False
+
+    return True    
