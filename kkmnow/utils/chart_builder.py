@@ -254,12 +254,10 @@ def snapshot_chart(file_name, variables) :
 
     res_dict = df[record_list].to_dict(orient="records")
     
-    v2_res = []
+    res = []
 
     for i in res_dict :
-        v2_res.append(i)
-
-    res = v2_res
+        res.append(i)
 
     return res
 
