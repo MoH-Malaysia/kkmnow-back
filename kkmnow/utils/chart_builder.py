@@ -1,10 +1,6 @@
 import pandas as pd
-import json
 import numpy as np
-import copy
-import ast
 from mergedeep import merge
-import datetime
 from kkmnow.utils.general_chart_helpers import *
 from kkmnow.utils.operations import *
 from dateutil.relativedelta import relativedelta
@@ -40,7 +36,6 @@ def bar_chart(file_name, variables) :
         for b in group[::-1]:
             result = {b: result}
         if isinstance(axis_values, list) : 
-            # group = group[0] if len(group) == 1 else group
             x_list = df.groupby(keys)[axis_values[0]].get_group(group).to_list()
             y_list = df.groupby(keys)[axis_values[1]].get_group(group).to_list()
             final_d = {'x' : x_list, 'y' : y_list}
@@ -176,13 +171,13 @@ def heatmap_chart(file_name, variables) :
     keys = variables['keys']
     replace_vals = variables['replace_vals']
     dict_rename = variables['dict_rename']
-    operation = variables['operation']
     row_format = variables['row_format']
 
     df = pd.read_parquet(file_name)
     df['id'] = df[id] # Create ID first, cause ID may be 'state'
     if 'state' in df.columns : 
         df['state'].replace(STATE_ABBR, inplace=True)
+        
     df = df.replace({np.nan: variables['null_values']})
     col_list = []
 
@@ -205,14 +200,27 @@ def heatmap_chart(file_name, variables) :
     df['data'] = df[ col_list ].values.tolist()
     df['final'] = df[ ['id', 'data'] ].apply(lambda s: s.to_dict(), axis=1)
 
-    res = prepopulate_dict(keys, df)
+    df['u_groups'] = list(df[keys].itertuples(index=False, name=None))
+    u_groups_list = df['u_groups'].unique().tolist()
+    
+    res = {}
+    for group in u_groups_list : 
+        result = {}
+        for b in group[::-1]:
+            result = {str(b): result}
+        group = group[0] if len(group) == 1 else group    
+        data_arr = df.groupby(keys)['final'].get_group( group ).values
+        
+        cur_id = df.groupby(keys)['id'].get_group( group ).unique()[0]
+        cur_id = cur_id if isinstance(cur_id,str) else int(cur_id)
+        
+        group = [str(group)] if isinstance(group, str) else [str(i) for i in group]
+        data_arr = data_arr[0]['data'] if len(data_arr) == 1 else [x['data'][0] for x in data_arr]
+        final_dict = {'id' : cur_id, 'data' : data_arr}
 
-    for index, row in df.iterrows():  
-        k_list = []
-        for k in keys :
-            k_list.append(row[k])
-        set_dict(res, k_list, row['final'], operation)
-
+        set_dict(result, group, final_dict, 'SET')
+        merge(res, result)
+    
     return res
 
 '''
@@ -281,12 +289,14 @@ def timeseries_chart(file_name, variables) :
     if 'state' in df.columns:
         df['state'].replace(STATE_ABBR, inplace=True)
 
-    keys_list = []
-    get_nested_keys(variables, keys_list, 'KEYS')
-    keys_list = keys_list[::-1]
+    structure_info = {
+        'key_list' : [],
+        'value_obj' : []
+    }
 
-    value_obj = []
-    get_nested_keys(variables, value_obj, 'VALUES')
+    get_nested_keys(variables, structure_info)
+    keys_list = structure_info['key_list'][::-1]
+    value_obj = structure_info['value_obj']
 
     if len(keys_list) == 0 : 
         res = {}

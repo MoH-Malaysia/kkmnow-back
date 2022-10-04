@@ -34,18 +34,16 @@ STATE_ABBR = {'Johor': 'jhr',
 Gets all nested keys,
 within a dictionary
 '''
-def get_nested_keys(d, keys, search):
+def get_nested_keys(d, keys):
     for k, v in d.items():
         if isinstance(v, dict):
-            get_nested_keys(v, keys, search)
-            if search == 'KEYS' :
-                keys.append(k)
+            get_nested_keys(v, keys)
+            keys['key_list'].append(k)
         else :
-            if search == 'VALUES' :
-                if len(keys) == 0 :
-                    keys.append(dict({k : v}))
-                else :
-                    keys[0][k] = v
+            if len(keys['value_obj']) == 0 :
+                keys['value_obj'].append(dict({k : v}))
+            else :
+                keys['value_obj'][0][k] = v
 
 '''
 Gets a value of a dictionary,
@@ -62,12 +60,7 @@ based on the nested keys
 '''
 def set_dict(d, keys, value, operation):
     d = get_dict(d, keys[:-1])
-    if (operation == "APPEND") and (d[keys[-1]] != {}) :
-        d[keys[-1]]['data'].append(value['data'][0])
-    elif operation  == "BARCHART" :
-        d[keys[-1]].append(value)
-    else : 
-        d[keys[-1]] = value
+    d[keys[-1]] = value
 
 '''
 Converts parquet files into csv
@@ -90,34 +83,7 @@ Custom renaming,
 for labels within a chart
 '''
 def rename_labels(label, rname_dict) : 
-    txt = label
-
     for k, v in rname_dict.items() :
-        txt = re.sub(k, v, txt)
-        # txt = txt.replace(k, v)
+        label = re.sub(k, v, label)
 
-    return txt.replace("_", " ").title()
-
-'''
-Prepopulates a dictionary,
-with the respective keys
-'''
-def prepopulate_dict(keys, df) :
-    res = {}
-
-    for i in keys[::-1] :
-        temp = {}
-        for x in df[i].unique().tolist() :
-            temp[x] = {}
-        res[i] = temp
-
-    count = 0
-    prev = {}
-    for k, v in res.items() :          
-        for i, x in v.items() :
-            if count > 0 :
-                v[i].update(prev)
-        prev = v
-        count = count + 1
-
-    return res[keys[0]]
+    return label.replace("_", " ").title()

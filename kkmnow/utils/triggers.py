@@ -2,12 +2,19 @@ import os
 from os import listdir
 from os.path import isfile, join
 import requests
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 '''
 Sends a telegram message
 '''
 
 def send_telegram(message) :
+    location = '--- ' + os.getenv('ENV_LOCATION') + ' ---\n'
+    message = location + message
+
     params = {
         'chat_id': os.getenv("TELEGRAM_CHAT_ID"),
         'text': message

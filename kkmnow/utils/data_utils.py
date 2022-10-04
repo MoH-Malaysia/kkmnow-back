@@ -30,22 +30,17 @@ def rebuild_dashboard_meta(operation) :
     meta_files = [f for f in listdir(META_DIR) if isfile(join(META_DIR, f))]
     failed_builds = []
 
-    # get_or_create
     for meta in meta_files : 
         try : 
             f_meta = META_DIR + meta
             f = open(f_meta)
             data = json.load(f)
             dbd_name = meta.replace(".json", "")
-            record_exists = MetaJson.objects.filter(dashboard_name=dbd_name).count()
             
-            if record_exists : 
-                cur_record = MetaJson.objects.get(dashboard_name=dbd_name) # Get last record here
-                cur_record.dashboard_meta = data
-                cur_record.save()                
-            else : 
-                new_record = MetaJson.objects.create(dashboard_name=dbd_name,dashboard_meta=data)
-                new_record.save()
+            updated_values = {'dashboard_meta' : data}
+            obj, created = MetaJson.objects.update_or_create(dashboard_name=dbd_name, defaults=updated_values)
+            obj.save()
+            
             cache.set('META_' + dbd_name, data)
         except Exception as e :
             failed_obj = {}
@@ -82,7 +77,7 @@ def rebuild_dashboard_charts(operation) :
         dbd_name = meta['dashboard_name']
         chart_list = dbd_meta['charts']
 
-        for k, v in chart_list.items() :
+        for k in chart_list.keys() :
             chart_name = k
             chart_type = chart_list[k]['chart_type']
             c_data = {}
@@ -92,15 +87,10 @@ def rebuild_dashboard_charts(operation) :
             try:
                 res = dashboard_builder.build_chart(chart_list[k]['chart_type'], c_data)
                 if len(res) > 0 : # If the dict isnt empty
-                    record_exists = KKMNowJSON.objects.filter(dashboard_name=dbd_name, chart_name=k).count()
-                    if record_exists : # If the record exists, update
-                        cur_record = KKMNowJSON.objects.get(dashboard_name=dbd_name, chart_name=k)
-                        cur_record.chart_data = res
-                        cur_record.save()
-                    else : # If the record does not exist, insert
-                        p = KKMNowJSON.objects.create(dashboard_name=dbd_name, chart_name=k, chart_type=chart_type,api_type=api_type, chart_data=res)
-                        p.save()
-                    cache.set(dbd_name + "_" + k, res)    
+                    updated_values = {'chart_type' : chart_type, 'api_type' : api_type, 'chart_data' : res}
+                    obj, created = KKMNowJSON.objects.update_or_create(dashboard_name=dbd_name, chart_name=k, defaults=updated_values)
+                    obj.save()
+                    cache.set(dbd_name + "_" + k, res)
             except Exception as e:
                 failed_obj = {}
                 failed_obj['CHART_NAME'] = chart_name

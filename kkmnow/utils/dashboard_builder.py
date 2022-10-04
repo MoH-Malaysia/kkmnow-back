@@ -31,5 +31,4 @@ def build_chart(chart_type, data) :
         case 'map_lat_lon' : 
             return map_lat_lon(input_file, variables)
         case _:
-            # If its not found
             return {}
