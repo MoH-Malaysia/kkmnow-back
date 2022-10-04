@@ -13,13 +13,16 @@ from kkmnow.utils import cron_utils, triggers
 
 from .models import KKMNowJSON, MetaJson
 
+from threading import Thread
+
 env = environ.Env()
 environ.Env.read_env()
 
 class KKMNOW(APIView):
     def post(self, request, format=None):
         if is_valid_request(request, os.getenv("WORKFLOW_TOKEN")) :
-            cron_utils.data_operation('UPDATE')
+            thread = Thread(target=cron_utils.data_operation, args=('UPDATE',))
+            thread.start()
             return Response(status=status.HTTP_200_OK)
         
         return JsonResponse({'status':401,'message':"unauthorized"}, status=401)
