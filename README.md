@@ -3,7 +3,6 @@
 The backend API for KKMNOW that serves data available on [`MoH-Malaysia/kkmnow-data`](https://github.com/MoH-Malaysia/kkmnow-data) to the frontend at [`MoH-Malaysia/kkmnow-front`](https://github.com/MoH-Malaysia/kkmnow-front). 
 - Django app name: `kkmnow`
 - Database: `postgresql`
-- API Cache: `redis`
 
 ## Setup virtual environment
 
@@ -28,6 +27,13 @@ pip install -r requirements.txt
 ## API Endpoint
 
 API will be running at `http://127.0.0.1:8000/kkmnow/`
+
+## Fetching new data
+As of now, KKMNOW uses github actions to trigger a rebuild or update of data, every time an updated dataset is pushed. Alternatively, on your preferred setup, there are 2 possible ways to update the data.
+- Using POST method
+  - A post request can be sent to the endpoint `https://<your url here>/kkmnow/` , which would by default trigger an update, and populate the DB with the new data.
+- Using command line
+  - Alternatively, if your desired cron / task scheduler runs locally, you could use the command `python manage.py loader UPDATE` , to trigger an update and populate the DB with the new data.
 
 ## Other notes
 - Private tokens required:
