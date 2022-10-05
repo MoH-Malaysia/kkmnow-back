@@ -56,7 +56,7 @@ A META Json contains all information required to build a dashboard. These files 
 ### Chart Builders version 1.0 ###
 Critical design principle: All charts of the same type should be built using only 1 method. For instance, all time series charts on the site should (as far as possible) be handled by the same code unit. 
 - Within the `utils` folder in the project, the `chart_builder` file contains several methods for various charts, such as heatmaps, bar charts, choropleths, etc.
-- As long as sufficient information is supplied (by the META Json), the chart builder can dynamically format a chart's api, thus requiring no 'hard-coding'. This icnrease versatility.
+- As long as sufficient information is supplied (by the META Json), the chart builder can dynamically format a chart's api, thus requiring no 'hard-coding'. This increases versatility.
 
 ### API endpoint version 1.0 ###
 Despite KKMNOW having 8 dashboards as of 5th October, there is only 1 endpoint which serves all dashboards.
