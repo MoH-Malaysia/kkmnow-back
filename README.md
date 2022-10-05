@@ -44,7 +44,7 @@ Before explaining the logic of KKMNOW's backend operations, here is a brief desc
 1. KKMNOW will only keep expanding as more dashboards are added, so we wanted to ensure that the number of endpoints did not balloon along with it.
 2. KKMNOW will likely include more chart types over time, which may vary in what they require in terms of API structure and business logic.
 
-Therefore, to minimise complexity, it was vital that we used an architecture that could minimise keep the number of endpoints minimal, while simultaneously ensuring that chart data could be served in as versatile a manner as possible. Here are the key ingredients we used to do this:
+Therefore, to minimise complexity, it was vital that we used an architecture that could keep the number of endpoints minimal, while simultaneously ensuring that chart data could be served in as versatile a manner as possible. Here are the key ingredients we used to do this:
 
 ### META Jsons version 1.0 ###
 A META Json contains all information required to build a dashboard. These files can be found within the `management/commands/META_JSON` folder, within the app. Each one is responsible for either a dashboard, or a dedicated chart.
