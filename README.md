@@ -44,7 +44,7 @@ Before explaining the logic of KKMNOW's backend operations, here is a brief desc
 1. KKMNOW will only keep expanding as more dashboards are added, so we wanted to ensure that the number of endpoints did not balloon along with it.
 2. KKMNOW will likely include more chart types over time, which may vary in what they require in terms of API structure and business logic.
 
-Therefore, to minimise complexity, it was vital that we used an architecture that could minimise keep the number of endpoints minimal, while simultaneously ensuring that chart data could be served in as versatile a manner as possible. Here are the key ingredients we used to do this:
+Therefore, to minimise complexity, it was vital that we used an architecture that could keep the number of endpoints minimal, while simultaneously ensuring that chart data could be served in as versatile a manner as possible. Here are the key ingredients we used to do this:
 
 ### META Jsons version 1.0 ###
 A META Json contains all information required to build a dashboard. These files can be found within the `management/commands/META_JSON` folder, within the app. Each one is responsible for either a dashboard, or a dedicated chart.
@@ -56,7 +56,7 @@ A META Json contains all information required to build a dashboard. These files 
 ### Chart Builders version 1.0 ###
 Critical design principle: All charts of the same type should be built using only 1 method. For instance, all time series charts on the site should (as far as possible) be handled by the same code unit. 
 - Within the `utils` folder in the project, the `chart_builder` file contains several methods for various charts, such as heatmaps, bar charts, choropleths, etc.
-- As long as sufficient information is supplied (by the META Json), the chart builder can dynamically format a chart's api, thus requiring no 'hard-coding'. This icnrease versatility.
+- As long as sufficient information is supplied (by the META Json), the chart builder can dynamically format a chart's api, thus requiring no 'hard-coding'. This increases versatility.
 
 ### API endpoint version 1.0 ###
 Despite KKMNOW having 8 dashboards as of 5th October, there is only 1 endpoint which serves all dashboards.
