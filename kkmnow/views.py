@@ -19,19 +19,11 @@ env = environ.Env()
 environ.Env.read_env()
 
 class KKMNOW(APIView):
-    def post(self, request, format=None):
-        if is_valid_request(request, os.getenv("WORKFLOW_TOKEN")) :
-            thread = Thread(target=cron_utils.data_operation, args=('UPDATE',))
-            thread.start()
-            return Response(status=status.HTTP_200_OK)
-        
-        return JsonResponse({'status':401,'message':"unauthorized"}, status=401)
+    def post(self, *_):
+        Thread(target=cron_utils.data_operation, args=('UPDATE',)).start()
+        return Response(status=status.HTTP_200_OK)
 
-
-    def get(self, request, format=None):
-        if not is_valid_request(request, os.getenv("WORKFLOW_TOKEN")) :
-            return JsonResponse({'status': 401,'message':"unauthorized"}, status=401)
-
+    def get(self, request, *_):
         param_list = dict(request.GET)
         params_req = ["dashboard"]
 
@@ -94,18 +86,3 @@ def get_nested_data(api_params, param_list, data) :
             break
     
     return data
-
-'''
-Checks whether or not,
-a request made is valid
-'''
-
-def is_valid_request(request, workflow_token) : 
-    if "Authorization" not in request.headers:
-        return False
-        
-    secret = request.headers.get("Authorization")
-    if secret != workflow_token:
-        return False
-
-    return True    
