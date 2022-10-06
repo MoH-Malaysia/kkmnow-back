@@ -30,7 +30,13 @@ class WorkflowAuthMiddleware:
         if "Authorization" not in request.headers:
             return False
 
-        if os.getenv("WORKFLOW_TOKEN", "") != request.headers.get("Authorization"):
+        secret = os.getenv("WORKFLOW_TOKEN")
+        if secret is None:
+            # If we haven't defined a token, we should block all requests just
+            # to be safe.
+            return False
+
+        if secret != request.headers.get("Authorization"):
             return False
 
         return True
