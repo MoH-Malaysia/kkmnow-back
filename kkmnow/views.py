@@ -68,14 +68,22 @@ def handle_request(param_list):
                     cur_chart_data = KKMNowJSON.objects.filter(dashboard_name=dbd_name, chart_name=k).values('chart_data')[0]['chart_data']                    
                     cache.set(dbd_name + "_" + k, cur_chart_data)
 
-                if api_type == 'static' : 
-                    res[k] = cur_chart_data
+                data_as_of = None if 'data_as_of' not in cur_chart_data else cur_chart_data['data_as_of']
+
+                if api_type == 'static' :
+                    res[k] = {}
+                    if data_as_of : 
+                        res[k]['data_as_of'] = data_as_of 
+                    res[k]['data'] = cur_chart_data['data']
                 else : 
                     if len(api_params) > 0:
-                        cur_chart_data = get_nested_data(api_params, param_list, cur_chart_data)
+                        cur_chart_data = get_nested_data(api_params, param_list, cur_chart_data['data'])
                     
                     if len(cur_chart_data) > 0:
-                        res[k] = cur_chart_data
+                        res[k] = {}
+                        if data_as_of : 
+                            res[k]['data_as_of'] = data_as_of                      
+                        res[k]['data'] = cur_chart_data
     return res
 
 '''

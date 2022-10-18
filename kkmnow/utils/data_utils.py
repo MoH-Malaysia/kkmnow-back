@@ -51,7 +51,7 @@ def rebuild_dashboard_meta(operation) :
     if len(failed_builds) > 0 :
         err_message = triggers.format_multi_line(failed_builds, '--- FAILED META ---') 
         triggers.send_telegram(err_message)
-    else : 
+    else :
         triggers.send_telegram("META Built Successfully.")
 
 
@@ -72,6 +72,15 @@ def rebuild_dashboard_charts(operation) :
     meta_json_list = MetaJson.objects.values()
     failed_builds = []
 
+    data_as_of_list = {}
+
+    try : 
+        data_as_of_file = os.path.join(os.getcwd(), 'KKMNOW_SRC/kkmnow-data-main') + '/metadata_updated_date.json'
+        f = open(data_as_of_file)
+        data_as_of_list = json.load(f)
+    except Exception as e:
+        triggers.send_telegram("----- DATA UPDATE FILES NOT PRESENT -----")
+
     for meta in meta_json_list : 
         dbd_meta = meta['dashboard_meta']
         dbd_name = meta['dashboard_name']
@@ -85,8 +94,15 @@ def rebuild_dashboard_charts(operation) :
             c_data['input'] = chart_list[k]['chart_source']
             api_type = chart_list[k]['api_type']
             try:
-                res = dashboard_builder.build_chart(chart_list[k]['chart_type'], c_data)
-                if len(res) > 0 : # If the dict isnt empty
+                res = {}
+                res['data'] = dashboard_builder.build_chart(chart_list[k]['chart_type'], c_data)
+                if len(res['data']) > 0 : # If the dict isnt empty
+        
+                    if len(data_as_of_list) > 0 : # If the data update file exists 
+                        data_update_info = get_latest_data_update([dbd_name, chart_name], data_as_of_list)
+                        if data_update_info : 
+                            res['data_as_of'] = data_update_info
+
                     updated_values = {'chart_type' : chart_type, 'api_type' : api_type, 'chart_data' : res}
                     obj, created = KKMNowJSON.objects.update_or_create(dashboard_name=dbd_name, chart_name=k, defaults=updated_values)
                     obj.save()
@@ -103,3 +119,13 @@ def rebuild_dashboard_charts(operation) :
         triggers.send_telegram(err_message)
     else : 
         triggers.send_telegram("Chart Data Built Successfully.")
+
+def get_latest_data_update(arr, data) : 
+    for a in arr:
+        if a in data:
+            data = data[a]
+        else:
+            data = None 
+            break
+    
+    return data
