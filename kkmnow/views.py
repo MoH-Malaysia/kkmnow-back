@@ -21,7 +21,7 @@ environ.Env.read_env()
 class KKMNOW(APIView):
     def post(self, request, format=None):
         if is_valid_request(request, os.getenv("WORKFLOW_TOKEN")) :
-            thread = Thread(target=cron_utils.data_operation, args=('UPDATE',))
+            thread = Thread(target=cron_utils.selective_update)
             thread.start()
             return Response(status=status.HTTP_200_OK)
         

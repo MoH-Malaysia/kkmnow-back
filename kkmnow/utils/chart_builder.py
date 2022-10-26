@@ -174,10 +174,11 @@ def heatmap_chart(file_name, variables) :
     row_format = variables['row_format']
 
     df = pd.read_parquet(file_name)
-    df['id'] = df[id] # Create ID first, cause ID may be 'state'
+    
     if 'state' in df.columns : 
         df['state'].replace(STATE_ABBR, inplace=True)
-        
+
+    df['id'] = df[id]    
     df = df.replace({np.nan: variables['null_values']})
     col_list = []
 
