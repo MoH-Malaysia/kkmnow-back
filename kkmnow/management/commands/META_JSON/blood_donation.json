@@ -62,10 +62,9 @@
         ],
         "null_values": null,
         "replace_vals": {
-          "High": 0,
-          "Safe": 1,
-          "Low": 2,
-          "Mid": 3
+          "Safe": 0,
+          "Mid": 1,
+          "Low": 2
         },
         "dict_rename": {
           "female_": "",

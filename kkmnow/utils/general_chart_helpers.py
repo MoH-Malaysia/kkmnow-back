@@ -86,4 +86,7 @@ def rename_labels(label, rname_dict) :
     for k, v in rname_dict.items() :
         label = re.sub(k, v, label)
 
+    if label in STATE_ABBR.values() : 
+        return label
+
     return label.replace("_", " ").title()
